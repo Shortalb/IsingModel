@@ -1,12 +1,3 @@
-"""
-=============
-Only changes made to 1.2 version is changing the zeros in the lattice to negative one
-=============
-This version doesnt allow for imaging of the lattice due to the picture format taking 0's not -1's
-=============
-Will solve this problem in later version. Possibly just need to change back to 0/1 format
-=============
-"""
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -34,13 +25,23 @@ lattice = np.reshape(lattice, (n,m)) #have to leave reshape til here due to 0/-1
 
 print lattice
 
-def spin_flipper(lattice): #function to select and flip a random spin
-    i = randint(0,n-1) #random row
-    j = randint(0,m-1) #random column 
-
-    if lattice[i][j] == -1: #if site is a 0
+def spin_flipper(): #function to select and flip a random spin
+    i = randint(1,n-2) #random row
+    j = randint(1,m-2) #random column
+    print "Row :", i , "Column :" , j #printing which site is chosen
+    top = lattice[i-1][j] #assigning name to above neighbour
+    bottom = lattice[i+1][j] #assigning name to below neighbour
+    left = lattice[i][j-1]
+    right = lattice[i][j+1]
+    if (top + bottom + left + right) > 0: #if nearest neighbours are net up
         lattice[i][j] = 1 #flip to a 1
+        print "flip up"
+
+    elif (top + bottom + left + right) < 0:
+        lattice[i][j] = -1 #else flip to down
+        print "flip down"
     else:
-        lattice[i][j] = -1 #else flip to a zero
-
-
+        print "sum is 0!"
+spin_flipper()
+print lattice
+#testing testing 1,2

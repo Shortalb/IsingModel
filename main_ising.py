@@ -14,7 +14,7 @@ h = 0
 
 
 def lattice_creator(n): #new function to make lattice
-    A = lattice = np.random.choice([-1,1], [n,n]) #random n*m long list, reshape to n,m matrix
+    lattice = np.random.choice([-1,1], [n,n]) #random n*m long list, reshape to n,m matrix
 
     return lattice
 
@@ -23,10 +23,10 @@ lattice = lattice_creator(n) #assign the lattice name to the output of function
 
 
 def spin_flipper(T): #function to select and flip a random spin
-    i = randint(0,n-1) #random row
-    j = randint(0,n-1) #random column
+    i = np.random.randint(0,n-1) #random row
+    j = np.random.randint(0,n-1) #random column
     #print i,j
-    r = random.random()
+    r = np.random.random()
 
     energy = 0.0
 

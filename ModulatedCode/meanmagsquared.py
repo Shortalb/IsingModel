@@ -11,10 +11,8 @@ h = 0.0 #external magnetic field value
 
 def get_mean_mag_squared(lattice):
 	mag_squared = float(0)
-	for i in range(0,n-1):
-		for j in range(0,n-1):
+	for i in range(0,n):
+		for j in range(0,n):
 			mag_squared += (lattice[i][j])**2
 	mean_mag_squared = mag_squared/n**2
 	return mean_mag_squared
-
-

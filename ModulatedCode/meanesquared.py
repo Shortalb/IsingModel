@@ -15,10 +15,8 @@ def get_mean_energy_squared(lattice):
 
 	energy_squared = float(0)
 
-	for i in range(0,n-1):
-		for j in range(0,n-1):
+	for i in range(0,n):
+		for j in range(0,n):
 			energy_squared += (Eget.get_energy_change(h,i,j))*2
 	mean_energy_squared = energy_squared/n**2
 	return mean_energy_squared
-
-

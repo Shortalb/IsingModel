@@ -7,12 +7,12 @@ import numpy as np
 import latticecreator as LatticeGet
 
 def get_total_energy(lattice):
-    
+
     #initialising the energy to zero
-    energy = float(0)    
-    
+    energy = float(0)
+
     #for loops to run through each row (i) and each element in that row(j)
-    for i in range(0,n-1):
-        for j in range(0,n-1):
+    for i in range(0,n):
+        for j in range(0,n):
             energy = energy + Eget.get_energy_change(h,i,j)
     return energy*0.5

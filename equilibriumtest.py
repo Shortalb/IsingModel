@@ -26,8 +26,8 @@ lattice = lattice_creator(n) #assign the lattice name to the output of function
 
 
 def spin_flipper(T): #function to select and flip a random spin
-    i = np.random.randint(0,n-1) #random row
-    j = np.random.randint(0,n-1) #random column
+    i = np.random.randint(0,n) #random row
+    j = np.random.randint(0,n) #random column
     #print i,j
     r = np.random.random()
 
@@ -64,18 +64,18 @@ def spin_flipper(T): #function to select and flip a random spin
 
     #### mean magnetisation per spin
 def get_mean_magnetisation(lattice):
-    #initialising value of total magnetisation    
+    #initialising value of total magnetisation
     total_magnetisation = float(0)
 
-    for i in range(0,n-1):
-        for j in range(0,n-1):
+    for i in range(0,n):
+        for j in range(0,n):
             total_magnetisation += lattice[i][j]
-    
+
     mean_magnetisation = total_magnetisation/n**2
     return mean_magnetisation
 
 
-step = 1000000 #change this in accordance with lattice size n.
+step = 1000 #change this in accordance with lattice size n.
 mean_mag_list = []
 n_steps = range(step)
 for iteration in range(step):
@@ -85,4 +85,3 @@ for iteration in range(step):
 
 plt.plot(n_steps, mean_mag_list)
 plt.show()
-

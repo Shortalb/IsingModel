@@ -6,10 +6,10 @@ import totalenergy as Etotal
 
 import meanenergy as Emean
 import getmeanmag as Mget
-#import meanesquared as Esquared
+import meanesquared as Esquared
 import meanmagsquared as Msquared
 #import Cv as cv
-import magsusc as magsusc
+import magsusc as magsu
 T = 0.00001 #temp multiplied by kB
 n = 50 # matrix size
 h = 0.0 #external magnetic field value
@@ -20,7 +20,7 @@ h = 0.0 #external magnetic field value
 
 
 def lattice_creator(n): #new function to make lattice
-        lattice = np.random.choice([-1,-1], [n,n]) 
+        lattice = np.random.choice([-1,1], [n,n]) 
         return lattice
 lattice = lattice_creator(n)
 
@@ -70,7 +70,7 @@ def spin_flipper(T): #function to select and flip a random spin
 def graph_equilibrium_test():
 	mean_mag_list = []
 	sweep_size = 1000
-	n_steps = 1000
+	n_steps = 5000
 
 	for i in range(n_steps):
 		for iteration in range(sweep_size):
@@ -78,7 +78,6 @@ def graph_equilibrium_test():
 		mean_magnetisation = Mget.get_mean_magnetisation(lattice)
 		mean_mag_list.append(mean_magnetisation)
 
-	
 	plt.plot(range(n_steps), mean_mag_list)
 	plt.title("Equilibrium Test for 50x50 Lattice")
 	plt.xlabel("Number of Steps")
@@ -86,6 +85,7 @@ def graph_equilibrium_test():
 	plt.grid(True)
 	plt.show()
 #graph_equilibrium_test()
+
 ####critical temperature test ####
 def get_crit_temp_graph():
 
@@ -107,17 +107,18 @@ def get_crit_temp_graph():
 	plt.grid(True)
 	plt.show()
 #get_crit_temp_graph()
-mean_magnetisation = Mget.get_mean_magnetisation(lattice)
-mean_mag_squared = Msquared.get_mean_mag_squared(lattice)
+
+
 #########magnetic susc graph####
 def get_mag_susc_graph():
+	mean_magnetisation = Mget.get_mean_magnetisation(lattice)
+	mean_mag_squared = Msquared.get_mean_mag_squared(lattice)
 	mag_susc_list = []
 	temps = np.arange(0.05,5.0,0.05)
-	mag_susc = 0
 	for temp in temps:
 		for iteration in range(100000):
 			spin_flipper(temp)
-		mag_susc = mag_susc.get_magnetic_susc(mean_mag_squared, mean_magnetisation)
+		mag_susc = magsu.get_magnetic_susc(mean_mag_squared, mean_magnetisation)
 		mag_susc_list.append(mag_susc)
 		print mag_susc
 
@@ -126,8 +127,5 @@ def get_mag_susc_graph():
 	plt.ylabel("Magnetic Susceptibility")
 	plt.xlabel("Temperature")
 	plt.grid(True)
-	plot.show()
-get_mag_susc_graph()
-
-
-
+	plt.show()
+#get_mag_susc_graph()

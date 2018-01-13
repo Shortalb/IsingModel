@@ -4,14 +4,14 @@ import matplotlib.pyplot as plt
 import totalenergy as Etotal
 
 
-import meanenergy as Emean
+
 import getmeanmag as Mget
 import meanesquared as Esquared
 import meanmagsquared as Msquared
 #import Cv as cv
 import magsusc as magsu
 T = 0.00001 #temp multiplied by kB
-n = 50 # matrix size
+n = 10 # matrix size
 h = 0.0 #external magnetic field value
 
 
@@ -20,7 +20,7 @@ h = 0.0 #external magnetic field value
 
 
 def lattice_creator(n): #new function to make lattice
-        lattice = np.random.choice([-1,1], [n,n]) 
+        lattice = np.random.choice([-1,1], [n,n]) #for crit temp test set both values to 1 or -1 to get the same start point every time when averaging
         return lattice
 lattice = lattice_creator(n)
 
@@ -64,9 +64,14 @@ def spin_flipper(T): #function to select and flip a random spin
     return lattice
 
 
+"""
+for iteration in range(1000000):
 
-
-
+	spin_flipper(T)
+plt.imshow(lattice)
+plt.show()
+print Emean.get_mean_energy(lattice)
+"""
 def graph_equilibrium_test():
 	mean_mag_list = []
 	sweep_size = 1000
@@ -85,6 +90,47 @@ def graph_equilibrium_test():
 	plt.grid(True)
 	plt.show()
 #graph_equilibrium_test()
+
+
+def get_mean_energy(lattice):
+
+    #initialising the energy to zero
+    energy = float(0)
+
+    #for loops to run through each row (i) and each element in that row(j)
+    for i in range(0,n):
+        for j in range(0,n):
+            energy = energy + get_energy_change(h,i,j)
+    mean_energy = (energy*0.5)/n**2
+    return mean_energy
+
+####ground state energy test
+def get_ground_state_energy():
+	mean_energy_list = []
+	temps = np.arange(0.05,5.0,0.05)
+
+	for temp in temps:
+		for iteration in range(100000):
+			spin_flipper(temp)
+
+		mean_energy = get_mean_energy(lattice)
+		mean_energy_list.append(mean_energy)	
+		print temp
+		print mean_energy
+
+	plt.plot(temps, mean_energy_list)
+	plt.title("Plot showing ground state energy")
+	plt.xlabel("Temperature")
+	plt.ylabel("Mean energy per spin")
+	plt.grid(True)
+	plt.show()
+
+	f = open("data.py", "w")
+	mean_energy_list[-1] = "stop"
+	f.write(",".join(map(lambda x: str(x), mean_energy_list)))
+	f.close()
+#get_ground_state_energy()
+
 
 ####critical temperature test ####
 def get_crit_temp_graph():
@@ -106,6 +152,11 @@ def get_crit_temp_graph():
 	plt.ylabel("Mean magnetisation per spin")
 	plt.grid(True)
 	plt.show()
+
+	f = open("data.py", "w")
+	mean_mag_list[-1] = "stop"
+	f.write(",".join(map(lambda x: str(x), mean_mag_list)))
+	f.close()
 #get_crit_temp_graph()
 
 

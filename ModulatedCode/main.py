@@ -8,12 +8,12 @@ import totalenergy as Etotal
 import getmeanmag as Mget
 import meanesquared as Esquared
 import meanmagsquared as Msquared
-#import Cv as cv
+import Cv as heatcap
 import magsusc as magsu
 T = 0.00001 #temp multiplied by kB
 n = 10 # matrix size
 h = 0.0 #external magnetic field value
-
+J = 1.0
 
 
 
@@ -35,7 +35,7 @@ def get_energy_change(h,i,j):
     #defining the hamiltonian 
     net_spin = top + bottom + left + right
     chosen_spin = lattice[i][j]
-    energy_change = -2*chosen_spin*(net_spin+h)
+    energy_change = -2*chosen_spin*(net_spin*J+h)
     
     return energy_change
 
@@ -64,12 +64,12 @@ def spin_flipper(T): #function to select and flip a random spin
     return lattice
 
 
-"""
+
 for iteration in range(1000000):
 
 	spin_flipper(T)
-plt.imshow(lattice)
-plt.show()
+
+"""
 print Emean.get_mean_energy(lattice)
 """
 def graph_equilibrium_test():
@@ -103,6 +103,10 @@ def get_mean_energy(lattice):
             energy = energy + get_energy_change(h,i,j)
     mean_energy = (energy*0.5)/n**2
     return mean_energy
+print get_mean_energy(lattice)
+print Esquared.get_mean_energy_squared(lattice)
+plt.imshow(lattice)
+plt.show()
 
 ####ground state energy test
 def get_ground_state_energy():
@@ -146,12 +150,12 @@ def get_crit_temp_graph():
 		print temp
 
 
-	plt.plot(temps, mean_mag_list)
-	plt.title("Plot showing critical temperature")
-	plt.xlabel("Temperature")
-	plt.ylabel("Mean magnetisation per spin")
-	plt.grid(True)
-	plt.show()
+	#plt.plot(temps, mean_mag_list)
+	#plt.title("Plot showing critical temperature")
+	#plt.xlabel("Temperature")
+	#plt.ylabel("Mean magnetisation per spin")
+	#plt.grid(True)
+	#plt.show()
 
 	f = open("data.py", "w")
 	mean_mag_list[-1] = "stop"
@@ -159,6 +163,21 @@ def get_crit_temp_graph():
 	f.close()
 #get_crit_temp_graph()
 
+####Cv test
+def get_CV():
+	Cv_list = []
+	temps = np.arange(0.001,20,0.5)
+	for temp in temps:
+		for iteration in range(100000):
+			spin_flipper(temp)
+		mean_energy_squared = Esquared.get_mean_energy_squared(lattice)
+		mean_energy = get_mean_energy(lattice)
+		cv =  heatcap.Cv(mean_energy_squared, mean_energy)
+		Cv_list.append(cv)
+		print temp
+	plt.plot(temps, Cv_list)
+	plt.show()
+#get_CV()
 
 #########magnetic susc graph####
 def get_mag_susc_graph():

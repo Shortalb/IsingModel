@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 """this script is an adapted version of the latest main.py to run for an NiO lattice. To be used in conjunction with the other modules"""
-import numpy as np
 import matplotlib.pyplot as plt
 import totalenergy as Etotal
 
+import numpy as np
 
 
 import getmeanmag as Mget
@@ -16,11 +16,11 @@ n = 50 # matrix size
 h = 0.0 #external magnetic field value
 
 
-J_1 = 2.3
-J_2 = -21
+J_1 = 2.3 #meV
+J_2 = -21 #meV
 
-coupling_1 = 1.0
-coupling_2 = J_2/J_1
+coupling_1 = 2.3 #1.0
+coupling_2 =   -21.0 #J_2/J_1
 print coupling_2
 
 
@@ -76,7 +76,8 @@ def spin_flipper(T): #function to select and flip a random spin
 
     return lattice
 
-
+#for iteration in range(100000):
+#	spin_flipper(T)
 
 def graph_equilibrium_test():
 	mean_mag_list = []
@@ -111,14 +112,17 @@ def get_mean_energy(lattice):
     mean_energy = (energy*0.5)/n**2
     return mean_energy
 
+
+
 ####ground state energy test
 def get_ground_state_energy():
 	mean_energy_list = []
-	temps = np.arange(0.05,5.0,0.05)
+	temps = np.arange(0.01,80.0,1.0)
 
 	for temp in temps:
-		for iteration in range(100000):
-			spin_flipper(temp)
+		for sweep in range(100):
+			for iteration in range(1000):
+				spin_flipper(temp)
 
 		mean_energy = get_mean_energy(lattice)
 		mean_energy_list.append(mean_energy)	
@@ -139,11 +143,11 @@ def get_ground_state_energy():
 #get_ground_state_energy()
 
 
-####critical temperature test ####
-def get_crit_temp_graph():
+####ordering temperature test ####
+def get_ordering_temp_graph():
 
 	mean_mag_list= []
-	temps = np.arange(0.05, 5.0,0.05)
+	temps = np.arange(0.0001, 80.0,0.5)
 
 	for temp in temps:
 		for iteration in range(100000):
@@ -151,10 +155,11 @@ def get_crit_temp_graph():
 		mean_magnetisation = Mget.get_mean_magnetisation(lattice)
 		mean_mag_list.append(mean_magnetisation)
 		print temp
+		print mean_magnetisation
 
 
 	plt.plot(temps, mean_mag_list)
-	plt.title("Plot showing critical temperature")
+	plt.title("Plot showing ordering temperature")
 	plt.xlabel("Temperature")
 	plt.ylabel("Mean magnetisation per spin")
 	plt.grid(True)
@@ -164,7 +169,34 @@ def get_crit_temp_graph():
 	mean_mag_list[-1] = "stop"
 	f.write(",".join(map(lambda x: str(x), mean_mag_list)))
 	f.close()
-#get_crit_temp_graph()
+#get_ordering_temp_graph()
+#####testing to see what h value breaks the antiferromagnetic properties of NiO
+
+
+
+def get_h_data():
+	mean_mag_list = []
+	h_list = np.arange(0.0,40, 1)
+	for h in h_list:
+		for iteration in range(100000):
+			spin_flipper(T)
+		mean_magnetisation = Mget.get_mean_magnetisation(lattice)
+		mean_mag_list.append(mean_magnetisation)
+		print h
+		print mean_magnetisation
+	plt.plot(h_list, mean_mag_list)
+	plt.show()
+
+
+####Cv test
+def get_CV():
+	Cv_list = []
+	temps = np.arange(0.001,5,1)
+	for temp in temps:
+		for iteration in range(10000):
+			spin_flipper(temp)
+		
+
 
 
 #########magnetic susc graph####
@@ -187,3 +219,6 @@ def get_mag_susc_graph():
 	plt.grid(True)
 	plt.show()
 #get_mag_susc_graph()
+
+
+

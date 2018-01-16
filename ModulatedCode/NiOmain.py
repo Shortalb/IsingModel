@@ -45,10 +45,10 @@ def get_energy_change(h,i,j):
 	diagonal_down_right = lattice[(i+1)%n][(j+1)%n]
 
 	#defining the hamiltonian
-	net_spin_nearest = top + bottom + left + right 
+	net_spin_nearest = top + bottom + left + right
 	net_spin_second_nearest = diagonal_up_left + diagonal_up_right + diagonal_down_left + diagonal_down_right
 	chosen_spin = lattice[i][j]
-	energy_change = -2*chosen_spin*((net_spin_nearest*coupling_1 + h) + (net_spin_second_nearest*coupling_2 +h))
+	energy_change = -2*chosen_spin*((net_spin_nearest*coupling_1) + (net_spin_second_nearest*coupling_2) + h)
 
 	return energy_change
 
@@ -125,7 +125,7 @@ def get_ground_state_energy():
 				spin_flipper(temp)
 
 		mean_energy = get_mean_energy(lattice)
-		mean_energy_list.append(mean_energy)	
+		mean_energy_list.append(mean_energy)
 		print temp
 		print mean_energy
 
@@ -140,7 +140,7 @@ def get_ground_state_energy():
 	mean_energy_list[-1] = "stop"
 	f.write(",".join(map(lambda x: str(x), mean_energy_list)))
 	f.close()
-#get_ground_state_energy()
+get_ground_state_energy()
 
 
 ####ordering temperature test ####
@@ -195,7 +195,7 @@ def get_CV():
 	for temp in temps:
 		for iteration in range(10000):
 			spin_flipper(temp)
-		
+
 
 
 
@@ -219,6 +219,3 @@ def get_mag_susc_graph():
 	plt.grid(True)
 	plt.show()
 #get_mag_susc_graph()
-
-
-
